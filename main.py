@@ -150,7 +150,7 @@ def get_linkedin_profile(api, public_id):
 
 # Main function to process multiple profiles
 def main():
-    api = Linkedin('meetjethwa3@gmail.com', 'Mahantam#23')
+    api = Linkedin('linkedinemail', 'password')
     
     # Read the Excel file with LinkedIn URLs
     input_file = 'faculty_names_and_linkedin_urls.xlsx'
