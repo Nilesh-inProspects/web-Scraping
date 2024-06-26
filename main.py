@@ -130,7 +130,7 @@ def append_to_excel(profile_data, sheet_name):
 
 # Function to insert data into MongoDB
 def insert_to_mongodb(profile_data):
-    client = MongoClient('mongodb+srv://nilu191:nilu191@cluster0.slak3.mongodb.net/')
+    client = MongoClient('')
     db = client['linkedin']
     collection = db['profiles']
     collection.insert_one(profile_data)
