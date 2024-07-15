@@ -1,0 +1,6 @@
+linkedin-api
+openpyxl
+pymongo
+pandas
+streamlit
+requests
