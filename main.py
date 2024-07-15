@@ -1,5 +1,6 @@
 import os
 import json
+from dotenv import load_dotenv
 from linkedin_api import Linkedin
 from openpyxl import load_workbook
 from pymongo import MongoClient
@@ -7,7 +8,7 @@ import pandas as pd
 import streamlit as st
 from requests.cookies import cookiejar_from_dict
 
-
+load_dotenv()
 #3.10
 # Set LinkedIn cookies directly
 os.environ["LINKEDIN_COOKIE_LI_AT"] = "AQEDASar904EhzN7AAABkJEpS-wAAAGQtTXP7E0AUMqyNC4s97XRXHZChzLJjFbbcZjmzVUpyMiuPI-9RxUjMxRXQuPKE-3shYFtz6E_F-MFCGwUr_ZrslJYajHWQl0QoMG1NiAUfDdXae-G6snwvmEF"
