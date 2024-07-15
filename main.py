@@ -1,8 +1,15 @@
+import os
 import json
 from linkedin_api import Linkedin
 from openpyxl import load_workbook
 from pymongo import MongoClient
 import pandas as pd
+import streamlit as st
+from requests.cookies import cookiejar_from_dict
+#3.10
+# Set LinkedIn cookies directly
+os.environ["LINKEDIN_COOKIE_LI_AT"] = "AQEDASar904EhzN7AAABkJEpS-wAAAGQtTXP7E0AUMqyNC4s97XRXHZChzLJjFbbcZjmzVUpyMiuPI-9RxUjMxRXQuPKE-3shYFtz6E_F-MFCGwUr_ZrslJYajHWQl0QoMG1NiAUfDdXae-G6snwvmEF"
+os.environ["LINKEDIN_COOKIE_JSESSIONID"] = "ajax:7756477511703306536"
 
 # Function to append data to Excel
 def append_to_excel(profile_data, sheet_name):
@@ -16,8 +23,8 @@ def append_to_excel(profile_data, sheet_name):
             ws.append(["Full Name", "Profile Headline", "Industry", "Location", "Summary", "Skills", "Profile URL"])
         elif sheet_name == "LinkedIn Data 2":
             ws.append(["Full Name", "School", "Degree", "Field of study", "Start dateMonth", "Start dateYear",
-                       "End dateMonth", "End dateYear", "Grade", "Activities and societies", "Description", "Skills", "Media", 
-                       "Type", "Location", "Start dateMonth", "Start dateYear", "End dateMonth", "End dateYear", 
+                       "End dateMonth", "End dateYear", "Grade", "Activities and societies", "Description", "Skills", "Media",
+                       "Type", "Location", "Start dateMonth", "Start dateYear", "End dateMonth", "End dateYear",
                        "Description", "Profile Headline", "Media(Links)", "Media(pictures)"])
         elif sheet_name == "LinkedIn Data 3":
             ws.append(["Full Name", "License or certification", "Project", "Course"])
@@ -130,7 +137,7 @@ def append_to_excel(profile_data, sheet_name):
 
 # Function to insert data into MongoDB
 def insert_to_mongodb(profile_data):
-    client = MongoClient('')
+    client = MongoClient('mongodb+srv://nilu191:nilu191@cluster0.slak3.mongodb.net/')
     db = client['linkedin']
     collection = db['profiles']
     collection.insert_one(profile_data)
@@ -148,19 +155,32 @@ def get_linkedin_profile(api, public_id):
     profile = api.get_profile(public_id)
     return profile
 
-# Main function to process multiple profiles
-def main():
-    api = Linkedin('linkedinemail', 'password')
-    
-    # Read the Excel file with LinkedIn URLs
-    input_file = 'faculty_names_and_linkedin_urls.xlsx'
-    df = pd.read_excel(input_file)
-    
-    for index, row in df.iterrows():
-        linkedin_url = row['Linkedln URL']
+# Function to process multiple profiles from an Excel file
+def process_multiple_profiles(file):
+    df = pd.read_excel(file)
+    linkedin_urls = df['Linkedln URL'].tolist()
+    cookies = cookiejar_from_dict(
+        {
+            "liap": "true",
+            "li_at": os.environ["LINKEDIN_COOKIE_LI_AT"],
+            "JSESSIONID": os.environ["LINKEDIN_COOKIE_JSESSIONID"],
+        }
+    )
+    api = Linkedin("nileshk191@gmail.com", "Nilesh@191", cookies=cookies)
+
+    for linkedin_url in linkedin_urls:
         public_id = linkedin_url.split('/')[-1]
         profile_data = get_linkedin_profile(api, public_id)
         process_profile(profile_data)
+
+# Main function
+def main():
+    st.title("LinkedIn Profile Data Fetcher")
+    uploaded_file = st.file_uploader("Choose an Excel file with LinkedIn URLs", type="xlsx")
+    if uploaded_file is not None:
+        st.write("Processing...")
+        process_multiple_profiles(uploaded_file)
+        st.write("Data successfully appended to Excel and MongoDB!")
 
 if __name__ == "__main__":
     main()
