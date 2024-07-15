@@ -12,7 +12,8 @@ from requests.cookies import cookiejar_from_dict
 # Set LinkedIn cookies directly
 os.environ["LINKEDIN_COOKIE_LI_AT"] = "AQEDASar904EhzN7AAABkJEpS-wAAAGQtTXP7E0AUMqyNC4s97XRXHZChzLJjFbbcZjmzVUpyMiuPI-9RxUjMxRXQuPKE-3shYFtz6E_F-MFCGwUr_ZrslJYajHWQl0QoMG1NiAUfDdXae-G6snwvmEF"
 os.environ["LINKEDIN_COOKIE_JSESSIONID"] = "ajax:7756477511703306536"
-
+username = os.environ["USERNAME"]
+password = os.environ["PASSWORD"]
 # Function to append data to Excel
 def append_to_excel(profile_data, sheet_name):
     wb = load_workbook('faculty3.xlsx')
@@ -168,7 +169,7 @@ def process_multiple_profiles(file):
             "JSESSIONID": os.environ["LINKEDIN_COOKIE_JSESSIONID"],
         }
     )
-    api = Linkedin("nileshk191@gmail.com", "Nilesh@191", cookies=cookies)
+    api = Linkedin(username, password, cookies=cookies)
 
     for linkedin_url in linkedin_urls:
         public_id = linkedin_url.split('/')[-1]
