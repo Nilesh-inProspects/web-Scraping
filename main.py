@@ -17,7 +17,7 @@ username = "nileshk191@gmail.com"
 password = "Nilu@191"
 # Function to append data to Excel
 def append_to_excel(profile_data, sheet_name):
-    wb = load_workbook('faculty3.xlsx')
+    wb = load_workbook('https://github.com/Nilesh-inProspects/web-Scraping/blob/main/faculty3.xlsx')
     if sheet_name in wb.sheetnames:
         ws = wb[sheet_name]
     else:
@@ -137,7 +137,7 @@ def append_to_excel(profile_data, sheet_name):
                 ''   # Patent description not provided
             ])
 
-    wb.save('linkedin_data.xlsx')
+    wb.save('https://github.com/Nilesh-inProspects/web-Scraping/blob/main/faculty3.xlsx')
 
 # Function to insert data into MongoDB
 def insert_to_mongodb(profile_data):
